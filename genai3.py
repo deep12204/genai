@@ -10,17 +10,13 @@ corpus = [
     "Cardiovascular diseases are the leading cause of death"
 ]
 
-# Convert sentences to words
 data = [s.lower().split() for s in corpus]
 
-# Train Word2Vec
 model = Word2Vec(data, vector_size=50, min_count=1)
 
-# Similar words
 print("Similar words to diabetes:")
 print(model.wv.most_similar("diabetes"))
 
-# PCA Visualization
 words = model.wv.index_to_key
 vectors = [model.wv[w] for w in words]
 
