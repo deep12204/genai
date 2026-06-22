@@ -1,3 +1,5 @@
+pip uninstall -y transformers
+pip install transformers==4.46.3 torch sentencepiece accelerate
 from transformers import pipeline
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
