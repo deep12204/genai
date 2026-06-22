@@ -2,15 +2,16 @@ import cohere
 from gensim.downloader import load
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt_tab')
 glove = load("glove-wiki-gigaword-50")
 
 def enrich_prompt(prompt):
     words = word_tokenize(prompt.lower())
     words = [w for w in words if w not in stopwords.words('english')]
-
     enriched = prompt
-
     for word in words:
         try:
             similar = glove.most_similar(word, topn=2)
@@ -19,34 +20,28 @@ def enrich_prompt(prompt):
             pass
 
     return enriched
-
 api_key = input("Enter API Key: ")
 co = cohere.Client(api_key)
-
 prompt = input("Enter Prompt: ")
-
 enriched_prompt = enrich_prompt(prompt)
-
 original_response = co.chat(
     model="command-a-03-2025",
     message=prompt
 )
-
 enriched_response = co.chat(
     model="command-a-03-2025",
     message=enriched_prompt
 )
-
-print("\n===== ORIGINAL PROMPT =====")
+print("\nORIGINAL PROMPT")
 print(prompt)
 
-print("\n===== ORIGINAL RESPONSE =====")
+print("\nORIGINAL RESPONSE")
 print(original_response.text)
 
-print("\n===== ENRICHED PROMPT =====")
+print("\nENRICHED PROMPT")
 print(enriched_prompt)
 
-print("\n===== ENRICHED RESPONSE =====")
+print("\nENRICHED RESPONSE")
 print(enriched_response.text)
 
 !pip install gensim cohere
